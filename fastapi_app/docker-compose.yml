@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: fastapi_app/Dockerfile
+    container_name: ecommerce_api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=production
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount database file to persist data
+      - ../db.sqlite3:/app/db.sqlite3:rw
+      # Optional: mount code for development (comment out in production)
+      # - ../fastapi_app:/app/fastapi_app:ro
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\").read()' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

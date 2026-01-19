@@ -1,0 +1,32 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+env/
+venv/
+virt/
+
+# Python environment files
+.Python
+.env
+
+# Git
+.git
+.gitignore
+
+# Django
+db.sqlite3
+*.log
+media/
+staticfiles/
+__pycache__/
+
+# FastAPI / Uvicorn
+*.db
+*.sqlite3
+
+# Tests
+tests/

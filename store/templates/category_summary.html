@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<!-- Header -->
+<header class="shop-hero text-center text-white" 
+        style="background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url('{% static 'images/nike9.jpg' %}') center/cover no-repeat; height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container">
+        <h1 class="fw-bold">Categories</h1>
+        <p class="lead">Explore our diverse range of categories and find your perfect style.</p>
+        <a href="#featured" class="btn btn-light mt-3 px-4">Shop Now</a>
+    </div>
+</header>
+
+<!-- Categories Section -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row g-4">
+
+            {% for category in categories %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <a href="{% url 'category' category %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm h-100 category-card position-relative overflow-hidden">
+                        <img src="{% static 'images/nike8.jpg' %}" class="card-img-top" alt="{{ category }}">
+                        <div class="card-body text-center bg-dark bg-opacity-50 position-absolute bottom-0 w-100">
+                            <h5 class="card-title text-white fw-bold">{{ category }}</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<!-- Custom CSS for hover effect -->
+<style>
+    .category-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .category-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);
+    }
+    .category-card img {
+        object-fit: cover;
+        height: 250px;
+        width: 100%;
+    }
+    .category-card .card-body {
+        padding: 0.5rem;
+    }
+</style>
+
+{% endblock %}

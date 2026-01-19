@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- CART HERO -->
+<header class="text-white text-center"
+        style='background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),
+               url("{% static 'images/nike8.jpg' %}") center/cover no-repeat;
+               padding: 120px 0;'>
+    <div class="container">
+        <h1 class="display-4 fw-bolder">Shopping Cart</h1>
+        <p class="lead">Review your items before checkout</p>
+    </div>
+</header>
+
+<section class="container my-5">
+
+{% if cart_products %}
+
+<div class="row">
+    <!-- CART ITEMS -->
+    <div class="col-lg-8">
+
+        {% for product in cart_products %}
+        <div class="card mb-4 shadow-sm">
+            <div class="row g-0 align-items-center">
+
+                <div class="col-md-4">
+                    <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.name }}">
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card-body">
+
+                        <h5 class="fw-bold">{{ product.name }}</h5>
+                        <p class="text-muted small">{{ product.description }}</p>
+
+                        {% if product.is_sale %}
+                            <span class="badge bg-dark mb-2">Sale</span><br>
+                            <strike>${{ product.price }}</strike>
+                            <strong class="ms-2">${{ product.sale_price }}</strong>
+                        {% else %}
+                            <strong>${{ product.price }}</strong>
+                        {% endif %}
+
+                        <div class="row align-items-center mt-3">
+                            <div class="col-md-4">
+                                <small class="text-muted">Quantity</small>
+                                <select class="form-select form-select-sm" id="select{{product.id}}">
+                                    {% for key, value in quantities.items %}
+                                        {% if key == product.id|slugify %}
+                                            <option selected>{{ value }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-8 text-end mt-3 mt-md-0">
+                                <button data-index="{{product.id}}" class="btn btn-outline-dark btn-sm update-cart">
+                                    Update
+                                </button>
+                                <button data-index="{{product.id}}" class="btn btn-outline-danger btn-sm delete-product">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm p-4">
+            <h5 class="fw-bold mb-3">Order Summary</h5>
+
+            <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal</span>
+                <strong>${{ totals }}</strong>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3">
+                <span>Shipping</span>
+                <span class="text-success">Free</span>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between fs-5 mb-4">
+                <strong>Total</strong>
+                <strong>${{ totals }}</strong>
+            </div>
+
+            <a href="{% url 'checkout' %}" class="btn btn-dark w-100 mb-2">
+                Proceed to Checkout
+            </a>
+
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- EMPTY CART -->
+<div class="text-center my-5">
+    <h3 class="fw-bold">Your cart is empty</h3>
+    <p class="text-muted">Start shopping and add your favorite Nike gear</p>
+    <a href="{% url 'home' %}" class="btn btn-dark mt-3 px-4">
+        Shop Now
+    </a>
+</div>
+{% endif %}
+
+</section>
+
+<!-- AJAX Scripts -->
+<script>
+$(document).on('click', '.update-cart', function(e){
+    e.preventDefault();
+    var productid = $(this).data('index');
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'cart_update' %}",
+        data: {
+            product_id: productid,
+            product_qty: $('#select' + productid + ' option:selected').text(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+        },
+        success: function(){
+            location.reload();
+        }
+    });
+});
+
+$(document).on('click', '.delete-product', function(e){
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'cart_delete' %}",
+        data: {
+            product_id: $(this).data('index'),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+        },
+        success: function(){
+            location.reload();
+        }
+    });
+});
+</script>
+
+{% endblock %}

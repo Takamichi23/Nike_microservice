@@ -1,0 +1,54 @@
+[project]
+name = "fastapi-app"
+version = "0.1.0"
+description = "A FastAPI backend application"
+requires-python = ">=3.12"
+authors = [
+    { name = "Roejon Kayne Paul P. Hernandez", email = "roejonkaynepaul.hernandez@unc.edu.ph" }
+]
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+skip-string-normalization = false
+
+[tool.ruff]
+target-version = "py312"
+
+# Ruff handles linting + isort + pyflakes + more
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # modern Python upgrades
+    "ARG001", # unused function arguments
+]
+ignore = [
+    "E501",   # long lines handled by black
+    "B008",   # allow function calls in default args
+    "W191",   # tabs allowed
+    "B904",   # allow 'raise HTTPException' without 'from e'
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-single-line = false
+
+[tool.ruff.format]
+quote-style = "double"
+line-ending = "lf"
+
+# Helpful FastAPI dev command
+[tool.uvicorn]
+app = "main:app"
+host = "0.0.0.0"
+port = 8000
+reload = true

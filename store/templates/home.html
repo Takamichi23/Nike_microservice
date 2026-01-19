@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% load static %} <!-- ADD THIS LINE -->
+{% block content %}
+
+
+<!-- HERO SECTION -->
+<header class="shop-hero text-center text-white"
+    style="background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url('{% static 'images/hero1.jpg' %}') center/cover no-repeat; height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container">
+        <h1 class="fw-bold">Discover the Latest in Fashion</h1>
+        <p class="lead">Trendy styles, unbeatable prices. Shop now and elevate your wardrobe!</p>
+        <a href="#featured" class="btn btn-light mt-3 px-4">Shop Now</a>
+    </div>
+</header>
+
+<!-- FEATURED COLLECTIONS -->
+<section id="featured" class="py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-4 text-center">Featured Collections</h2>
+        <div class="row g-4">
+
+            <div class="row g-4">
+                <div class="col-md-4 d-flex">
+                    <div class="card text-white text-center bg-dark flex-fill">
+                        <img src="{% static 'images/nike6.jpg' %}" class="card-img" alt="Men's Collection">
+                        <div class="card-img-overlay d-flex flex-column justify-content-between p-3">
+                            <h5 class="card-title fw-bold mt-2">Men</h5>
+                            <a href="{% url 'category' 'Men' %}" class="btn btn-outline-light mb-2">Shop Men</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 d-flex">
+                    <div class="card text-white text-center bg-dark flex-fill">
+                        <img src="{% static 'images/nike7.jpg' %}" class="card-img" alt="Women's Collection">
+                        <div class="card-img-overlay d-flex flex-column justify-content-between p-3">
+                            <h5 class="card-title fw-bold mt-2">Women</h5>
+                            <a href="{% url 'category' 'Women' %}" class="btn btn-outline-light mb-2">Shop Women</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 d-flex">
+                    <div class="card text-white text-center bg-dark flex-fill">
+                        <img src="{% static 'images/nike4.jpg' %}" class="card-img" alt="New Arrivals">
+                        <div class="card-img-overlay d-flex flex-column justify-content-between p-3">
+                            <h5 class="card-title fw-bold mt-2">New Arrivals</h5>
+                            <a href="{% url 'category' 'New-Arrivals' %}" class="btn btn-outline-light mb-2">Shop
+                                Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+<!-- TRENDING PRODUCTS -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="fw-bold mb-4 text-center">Trending Products</h2>
+        <div class="row g-4 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+            <div class="col">
+                <div class="product-card h-100 d-flex flex-column position-relative border rounded overflow-hidden">
+                    
+                    <!-- Sale badge -->
+                    {% if product.is_sale %}
+                    <span class="badge bg-dark position-absolute top-0 start-0 m-2">Sale</span>
+                    {% endif %}
+                    
+                    <!-- Wishlist heart -->
+                    <i class="bi bi-heart position-absolute top-0 end-0 m-2 text-danger" style="cursor:pointer;"></i>
+
+                    <!-- Product image -->
+                    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+                    
+                    <!-- Product info -->
+                    <div class="product-info text-center p-2 flex-grow-1 d-flex flex-column justify-content-between">
+                        <h5 class="fw-semibold mb-1">{{ product.name }}</h5>
+                        <div>
+                            {% if product.is_sale %}
+                            <small>
+                                <strike>${{ product.price }}</strike>
+                                <strong>${{ product.sale_price }}</strong>
+                            </small>
+                            {% else %}
+                            <small>${{ product.price }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- View button at bottom -->
+                    <div class="text-center p-2">
+                        <a href="{% url 'product' pk=product.id %}" class="btn btn-outline-dark btn-sm w-100">View</a>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<!-- PROMO BANNER -->
+<section class="py-5 text-center text-white" style="background: url('{% static " images/promo-banner.jpg" %}')
+    center/cover no-repeat;">
+    <div class="container">
+        <h2 class="fw-bold">Special Offer</h2>
+        <p class="lead">Subscribe and get 10% off your first order!</p>
+        <a href="{% url 'register' %}" class="btn btn-dark mt-2">Sign Up Now</a>
+    </div>
+</section>
+
+{% endblock %}

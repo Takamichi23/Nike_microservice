@@ -1,0 +1,91 @@
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top border-bottom">
+    <div class="container-fluid px-4 px-lg-5">
+
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold text-uppercase" href="{% url 'home' %}">
+            NIKE
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <!-- CENTER NAV (Adidas-style categories) -->
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3 fw-semibold">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        Shop
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'category_summary' %}">All Products</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'category' 'MEN' %}">MEN</a></li>
+                        <li><a class="dropdown-item" href="{% url 'category' 'WOMAN' %}">WOMAN</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'search' %}">Search</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                </li>
+
+                {% if user.is_superuser %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        Orders
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'shipped_dash' %}">Shipped</a></li>
+                        <li><a class="dropdown-item" href="{% url 'not_shipped_dash' %}">Unshipped</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+
+            <!-- RIGHT ACTIONS (Icons like Adidas) -->
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- Account -->
+                {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <a class="text-dark fs-5" data-bs-toggle="dropdown">
+                        <i class="bi bi-person"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'update_user' %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'update_info' %}">Info</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-dark fs-5">
+                        <i class="bi bi-person"></i>
+                    </a>
+                {% endif %}
+
+                <!-- Cart -->
+                <a href="{% url 'cart_summary' %}" class="position-relative text-dark fs-5">
+                    <i class="bi bi-bag"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
+                        {{ cart|length }}
+                    </span>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</nav>
